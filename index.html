@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--Meta-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="ugm.gif">
+    <title> Luaran Hasil Tim UGM KTI ICEN-C </title>
+
+    <!-- Bootstrap Library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+        crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" 
+        crossorigin="anonymous">
+    </script>
+
+   <!-- Jquery Library -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous">
+    </script>
+
+   <!-- Cloudflare Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" 
+        crossorigin="anonymous">
+    </script>
+     
+    <!-- Dependencies -->
+    <script src="./bundle.js">
+    </script>
+
+    <!-- Add Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css"
+        integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+        crossorigin=""/>
+    <link rel="stylesheet" type="text/css" href="./Leaflet.GraphicScale.min.css">   
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js"
+        integrity="sha256-NDI0K41gVbWqfkkaHj15IzU7PtMoelkzyKp8TOaFQ3s="
+        crossorigin="">
+    </script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
+    </script>
+    <script src="./Leaflet.GraphicScale.min.js">
+    </script>
+    
+    <!-- Add Map -->
+    <style>
+        html, body, section
+        {
+            position: relative;
+            height: 100%;
+            background-color: #FFEBCD;
+        }
+
+        html
+        {
+            scroll-behavior: smooth;
+        }
+
+        #map {
+            height: calc(100vh - 50px);
+            }   
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"> Peta Interaktif Skala Priotritas Restorasi Lahan Gambut Tim UGM LKTI ICEN-C </a>
+    </nav>
+
+    <!-- Add Map GeoJSON-->
+    <center>
+        <div id="map"></div>
+        <script src="roipeat.js"></script>
+    </center>
+
+    <!-- Map Script -->
+    <script>
+        var map = L.map('map',{
+            center: [-0.577775, 109.787545],
+            zoom: 9
+        });
+
+        // Basemap Source
+        var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }).addTo(map);
+        var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>contributors'
+        });
+        var carto = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            maxZoom: 22
+        });
+
+        // Pop Up
+        var brg01 = L.marker([-0.088, 109.476]).bindPopup('BRG01'),
+            brg02 = L.marker([-0.103, 109.447]).bindPopup('BRG02'),
+            brg03 = L.marker([-0.195, 109.478]).bindPopup('BRG03'),
+            brg04 = L.marker([-0.241, 109.412]).bindPopup('BRG04'),
+            brg05 = L.marker([-0.301, 109.551]).bindPopup('BRG05'),
+            brg06 = L.marker([-0.491, 109.365]).bindPopup('BRG06'),
+            brg07 = L.marker([-1.075, 109.857]).bindPopup('BRG07');
+
+        var splg = L.layerGroup([brg01, brg02, brg03, brg04, brg05, brg06, brg07]);
+        var baseMaps = {
+            "Aerial Imagery": esri,
+            "OSM Product": osm,
+            "Dark Canvas": carto
+        };
+
+        // Basemap + Pop Up
+        var overlayMaps = {
+           "Titik SIPALAGA": splg
+        };
+
+        L.control.layers(baseMaps, overlayMaps).addTo(map) 
+
+        // Symbology + Action
+        L.geoJSON(ROIPeat,{
+            style: function(feature) {
+                switch (feature.properties.Skala_Prio) {
+                    case 'Sangat Tinggi': return {color: "crimson"};
+                    case 'Tinggi': return {color: "orangered"};
+                    case 'Cukup Tinggi': return {color: "orange"};
+                    case 'Sedang': return {color: "yellow"};
+                    case 'Cukup Rendah': return {color: "yellowgreen"};
+                    case 'Rendah': return {color: "limegreen"};
+                    case 'Sangat Rendah': return {color: "forestgreen"};
+                }
+            },
+
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(
+                'No KHG' + '<br>' +
+                '<strong>' +
+                feature.properties.No__KHG +
+                '</strong><br><br>'+
+
+                'Nama KHG' + '<br>' +
+                '<strong>' +
+                feature.properties.Nama_KHG_1 +
+                '</strong><br><br>'+
+
+                'Skala Prioritas Restorasi' + '<br>' +
+                '<strong>' +
+                feature.properties.Skala_Prio +
+                '</strong>'
+                );
+            }
+        }).addTo(map);
+
+        // Dependencies Final
+        L.Control.geocoder().addTo(map);
+	
+	    L.easyPrint({
+		    title: 'My awesome print button',
+		    position: 'topright',
+		    sizeModes: ['A3Portrait', 'A3Landscape']
+	    }).addTo(map);
+	
+	    var graphicScale = L.control.graphicScale({
+		    fill: "fill",
+		    doubleLine: "true",
+		    showSubunits: "true"
+	    }).addTo(map);
+    </script>
+
+    <!-- Bootstrap Bill Turner -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous">
+    </script>
+</body>
+</html>
